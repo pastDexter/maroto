@@ -61,6 +61,9 @@ type Text struct {
 	Extrapolate bool
 	// VerticalPadding define an additional space between lines
 	VerticalPadding float64
+	// IsUTF8Font defines if selected font family supports UTF-8
+	// otherwise unicode conversion with cp1251 will be applied
+	IsUTF8Font bool
 }
 
 // Font represents properties from a text

@@ -30,7 +30,6 @@ func NewText(pdf gofpdf.Pdf, math Math, font Font) *text {
 
 // Add a text inside a cell.
 func (s *text) Add(text string, cell Cell, textProp props.Text) {
-	translator := s.pdf.UnicodeTranslatorFromDescriptor("")
 	s.font.SetFont(textProp.Family, textProp.Style, textProp.Size)
 
 	// duplicated
@@ -39,16 +38,19 @@ func (s *text) Add(text string, cell Cell, textProp props.Text) {
 
 	cell.Y += fontHeight
 
-	// Apply Unicode before calc spaces
-	unicodeText := translator(text)
+	// Apply Unicode conversion if needed
+	if !textProp.IsUTF8Font {
+		translator := s.pdf.UnicodeTranslatorFromDescriptor("")
+		text = translator(text)
+	}
 
-	stringWidth := s.pdf.GetStringWidth(unicodeText)
-	words := strings.Split(unicodeText, " ")
+	stringWidth := s.pdf.GetStringWidth(text)
+	words := strings.Split(text, " ")
 	accumulateOffsetY := 0.0
 
 	// If should add one line
 	if stringWidth < cell.Width || textProp.Extrapolate || len(words) == 1 {
-		s.addLine(textProp, cell.X, cell.Width, cell.Y, stringWidth, unicodeText)
+		s.addLine(textProp, cell.X, cell.Width, cell.Y, stringWidth, text)
 	} else {
 		lines := s.getLines(words, cell.Width)
 
@@ -65,14 +67,16 @@ func (s *text) Add(text string, cell Cell, textProp props.Text) {
 
 // GetLinesQuantity retrieve the quantity of lines which a text will occupy to avoid that text to extrapolate a cell
 func (s *text) GetLinesQuantity(text string, textProp props.Text, colWidth float64) int {
-	translator := s.pdf.UnicodeTranslatorFromDescriptor("")
 	s.font.SetFont(textProp.Family, textProp.Style, textProp.Size)
 
-	// Apply Unicode
-	textTranslated := translator(text)
+	// Apply Unicode conversion if needed
+	if !textProp.IsUTF8Font {
+		translator := s.pdf.UnicodeTranslatorFromDescriptor("")
+		text = translator(text)
+	}
 
-	stringWidth := s.pdf.GetStringWidth(textTranslated)
-	words := strings.Split(textTranslated, " ")
+	stringWidth := s.pdf.GetStringWidth(text)
+	words := strings.Split(text, " ")
 
 	// If should add one line
 	if stringWidth < colWidth || textProp.Extrapolate || len(words) == 1 {
