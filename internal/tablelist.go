@@ -78,7 +78,7 @@ func (s *tableList) Create(header []string, contents [][]string, prop ...props.T
 
 			s.pdf.Col(tableProp.HeaderProp.GridSizes[i], func() {
 				reason := hs
-				s.pdf.Text(reason, tableProp.HeaderProp.ToTextProp(tableProp.Align, 0, false, 0.0))
+				s.pdf.Text(reason, tableProp.HeaderProp.ToTextProp(tableProp.Align, 0, false))
 			})
 		}
 	})
@@ -101,7 +101,7 @@ func (s *tableList) Create(header []string, contents [][]string, prop ...props.T
 				cs := c
 
 				s.pdf.Col(tableProp.ContentProp.GridSizes[i], func() {
-					s.pdf.Text(cs, tableProp.ContentProp.ToTextProp(tableProp.Align, 0, false, 0.0))
+					s.pdf.Text(cs, tableProp.ContentProp.ToTextProp(tableProp.Align, 0, false))
 				})
 			}
 		})
@@ -123,7 +123,7 @@ func (s *tableList) calcLinesHeight(textList []string, contentProp props.TableLi
 	width, _ := s.pdf.GetPageSize()
 	usefulWidth := float64(width - left - right)
 
-	textProp := contentProp.ToTextProp(align, 0, false, 0.0)
+	textProp := contentProp.ToTextProp(align, 0, false)
 
 	for i, text := range textList {
 		gridSize := float64(contentProp.GridSizes[i])
