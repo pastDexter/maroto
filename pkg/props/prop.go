@@ -110,6 +110,9 @@ type TableList struct {
 	// i.e rows with index (0, 2, 4, ..., N) will have background colorized,
 	// rows with index (1, 3, 5, ..., N) will not
 	AlternatedBackground *color.Color
+	// LastRowBackground defines special background color for last table row
+	// when not defined the default color will be used
+	LastRowBackground *color.Color
 	// HeaderContentSpace is the space between the header and the contents
 	HeaderContentSpace float64
 	// Line adds a line after every content-row to separate rows. The line's spaceHeight is set to 1.0

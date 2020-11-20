@@ -98,19 +98,19 @@ func (s *tableList) Create(header []string, contents [][]string, prop ...props.T
 			s.pdf.SetBackgroundColor(*tableProp.AlternatedBackground)
 		}
 
-		s.pdf.Row(rowHeight, func() {
-			for i, c := range content {
-				cs := c
+		if tableProp.LastRowBackground != nil && index == len(contents)-1 {
+			s.pdf.SetBackgroundColor(*tableProp.LastRowBackground)
+		}
 
+		s.pdf.Row(rowHeight, func() {
+			for i, cs := range content {
 				s.pdf.Col(tableProp.ContentProp.GridSizes[i], func() {
 					s.pdf.Text(cs, tableProp.ContentProp.ToTextProp(tableProp.Align, padding, false, 0.0))
 				})
 			}
 		})
 
-		if tableProp.AlternatedBackground != nil && index%2 == 0 {
-			s.pdf.SetBackgroundColor(color.NewWhite())
-		}
+		s.pdf.SetBackgroundColor(color.NewWhite())
 
 		if tableProp.Line {
 			s.pdf.Line(1.0)
