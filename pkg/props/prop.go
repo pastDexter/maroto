@@ -89,8 +89,8 @@ type TableListContent struct {
 	// value is not provided the width of all columns will be the
 	// same
 	GridSizes []uint
-	// VerticalPadding define an additional space between lines
-	VerticalPadding float64
+	// CellPadding define an additional space between table cells
+	CellPadding float64
 	// IsUTF8Font defines if selected font family supports UTF-8
 	// otherwise unicode conversion with cp1251 will be applied
 	IsUTF8Font bool
@@ -232,16 +232,16 @@ func (s *Font) ToTextProp(align consts.Align, top float64, extrapolate bool, ver
 }
 
 // ToTextProp from Font return a TableListContent based on Font
-func (s *TableListContent) ToTextProp(align consts.Align, top float64, extrapolate bool) Text {
+func (s *TableListContent) ToTextProp(align consts.Align, top float64, extrapolate bool, verticalPadding float64) Text {
 	textProp := Text{
 		Family:          s.Family,
 		Style:           s.Style,
 		Size:            s.Size,
+		IsUTF8Font:      s.IsUTF8Font,
 		Align:           align,
 		Top:             top,
 		Extrapolate:     extrapolate,
-		VerticalPadding: s.VerticalPadding,
-		IsUTF8Font:      s.IsUTF8Font,
+		VerticalPadding: verticalPadding,
 	}
 
 	textProp.MakeValid()
